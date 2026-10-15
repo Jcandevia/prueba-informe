@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informe Técnico - GESKUL 2.0</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
+        function printPDF() { window.print(); }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #1e293b; }
+        .page-container { max-width: 900px; margin: 0 auto; background: white; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); padding: 4rem; }
+        h1, h2, h3, h4 { color: #0f172a; letter-spacing: -0.025em; }
+        .table-header { background-color: #f1f5f9; color: #334155; font-weight: 600; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em; }
+        .table-row { border-bottom: 1px solid #e2e8f0; font-size: 0.875rem; }
+        .table-row:last-child { border-bottom: none; }
+        @media print {
+            body { background: white; }
+            .page-container { box-shadow: none; padding: 0; max-width: 100%; }
+            .no-print { display: none !important; }
+            .page-break { page-break-before: always; }
+            .avoid-break { page-break-inside: avoid; }
+            @page { margin: 2cm; }
+        }
+    </style>
+</head>
+<body class="py-8">
+    <button onclick="printPDF()" class="no-print fixed bottom-8 right-8 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-full shadow-lg font-medium flex items-center gap-2 transition-all">
+        <i class="ph ph-printer text-xl"></i>
+        Exportar a PDF
+    </button>
+
+    <div class="page-container rounded-xl">
+        <div class="min-h-[80vh] flex flex-col justify-center items-center text-center avoid-break">
+            <div class="w-20 h-20 bg-indigo-600 text-white rounded-2xl flex items-center justify-center mb-8 shadow-md">
+                <i class="ph ph-graduation-cap text-5xl"></i>
+            </div>
+            <h1 class="text-5xl font-bold mb-4 tracking-tight">DOCUMENTO DE ARQUITECTURA E INGENIERÍA</h1>
+            <h2 class="text-2xl text-slate-500 font-light mb-12">GESKUL 2.0 — Plataforma de Gestión Escolar SaaS</h2>
+            <div class="w-full max-w-lg bg-slate-50 border border-slate-200 rounded-xl p-8 text-left text-sm text-slate-600 space-y-4 shadow-sm">
+                <div class="flex justify-between border-b border-slate-200 pb-2"><span class="font-semibold text-slate-900">Autores:</span><span>Johnathan Cantillo &amp; Gustavo</span></div>
+                <div class="flex justify-between border-b border-slate-200 pb-2"><span class="font-semibold text-slate-900">Clasificación:</span><span>Documentación Técnica / Confidencial</span></div>
+                <div class="flex justify-between border-b border-slate-200 pb-2"><span class="font-semibold text-slate-900">Versión:</span><span>1.0 (Fase MVP)</span></div>
+                <div class="flex justify-between pb-2"><span class="font-semibold text-slate-900">Fecha de Emisión:</span><span>Octubre 2026</span></div>
+            </div>
+        </div>
+
+        <div class="page-break"></div>
+
+        <section class="mb-12 avoid-break">
+            <h2 class="text-2xl font-bold border-b-2 border-indigo-600 pb-2 mb-6 uppercase">1. Resumen Ejecutivo</h2>
+            <p class="text-slate-600 leading-relaxed mb-4 text-justify"><strong>GESKUL 2.0</strong> es una plataforma de software como servicio (SaaS) diseñada bajo una arquitectura <strong>Multi-tenant (Multi-inquilino)</strong> con capacidad de Marca Blanca. El sistema permite que múltiples instituciones educativas utilicen la misma infraestructura tecnológica manteniendo un aislamiento estricto de sus datos mediante políticas de seguridad a nivel de base de datos.</p>
+            <h3 class="text-lg font-semibold text-slate-800 mb-3 mt-6">Stack Tecnológico Principal</h3>
+            <ul class="grid grid-cols-2 gap-4 text-sm text-slate-600">
+                <li class="flex items-start gap-2"><i class="ph-fill ph-check-circle text-indigo-600 mt-0.5"></i><span><strong>Frontend:</strong> Next.js 16 (App Router, Turbopack).</span></li>
+                <li class="flex items-start gap-2"><i class="ph-fill ph-check-circle text-indigo-600 mt-0.5"></i><span><strong>Backend/DB:</strong> Supabase (PostgreSQL 15+).</span></li>
+                <li class="flex items-start gap-2"><i class="ph-fill ph-check-circle text-indigo-600 mt-0.5"></i><span><strong>Seguridad:</strong> Supabase Auth + RLS (Row Level Security).</span></li>
+                <li class="flex items-start gap-2"><i class="ph-fill ph-check-circle text-indigo-600 mt-0.5"></i><span><strong>Realtime:</strong> Supabase WebSockets.</span></li>
+                <li class="flex items-start gap-2 col-span-2"><i class="ph-fill ph-check-circle text-indigo-600 mt-0.5"></i><span><strong>Estructura:</strong> Monorepo gestionado con pnpm (apps/web, packages/types).</span></li>
+            </ul>
+        </section>
+
+        <section class="mb-12 avoid-break">
+            <h2 class="text-2xl font-bold border-b-2 border-indigo-600 pb-2 mb-6 uppercase">2. Estado Actual de Desarrollo</h2>
+            <p class="text-slate-600 leading-relaxed mb-4 text-justify">A la fecha, el equipo de ingeniería ha completado la cimentación de la arquitectura base del proyecto, logrando la interconexión exitosa entre el frontend y el motor de base de datos local. Los hitos técnicos superados incluyen:</p>
+            <div class="space-y-4">
+                <div class="bg-indigo-50 border border-indigo-100 rounded-lg p-5"><h4 class="font-bold text-indigo-900 mb-1 flex items-center gap-2"><i class="ph-fill ph-package text-xl"></i>1. Configuración de Monorepo y Paquetes</h4><p class="text-sm text-indigo-800">Se estableció una arquitectura de monorepo utilizando <code>pnpm workspaces</code>. Se aislaron las dependencias dividiendo el proyecto en <code>apps/web</code> (aplicación principal) y <code>packages/types</code> (tipados compartidos).</p></div>
+                <div class="bg-slate-50 border border-slate-200 rounded-lg p-5"><h4 class="font-bold text-slate-800 mb-1 flex items-center gap-2"><i class="ph-fill ph-code text-xl"></i>2. Resolución de Conflictos TypeScript</h4><p class="text-sm text-slate-600">Se calibró el compilador mediante la purga del archivo <code>tsconfig.json</code>. Se habilitaron banderas críticas como <code>allowJs: true</code>, <code>skipLibCheck: true</code>, y <code>moduleResolution: "bundler"</code>, eliminando errores de importación cruzada entre los paquetes del workspace.</p></div>
+                <div class="bg-slate-50 border border-slate-200 rounded-lg p-5"><h4 class="font-bold text-slate-800 mb-1 flex items-center gap-2"><i class="ph-fill ph-database text-xl"></i>3. Despliegue de Base de Datos Local (Supabase)</h4><p class="text-sm text-slate-600">Se inicializó un contenedor local de Supabase mediante <code>npx supabase start</code>. Se estableció la conexión mediante variables de entorno (<code>NEXT_PUBLIC_SUPABASE_URL</code> y <code>ANON_KEY</code>), validando el acceso a Supabase Studio en el puerto 54323.</p></div>
+                <div class="bg-slate-50 border border-slate-200 rounded-lg p-5"><h4 class="font-bold text-slate-800 mb-1 flex items-center gap-2"><i class="ph-fill ph-lightning text-xl"></i>4. Next.js 16 SSR &amp; Renderizado Asíncrono</h4><p class="text-sm text-slate-600">Se solucionó el error de pre-renderizado estático (<em>Blocking Route Error</em>) provocado por el conflicto entre <code>cacheComponents</code> y <code>force-dynamic</code>. La arquitectura se migró exitosamente al uso de <strong>React Suspense</strong> para la obtención de datos asíncronos limpios desde la tabla de instituciones.</p></div>
+            </div>
+        </section>
+
+        <div class="page-break"></div>
+
+        <section class="mb-12 avoid-break">
+            <h2 class="text-2xl font-bold border-b-2 border-indigo-600 pb-2 mb-6 uppercase">3. Modelo Entidad-Relación (MER)</h2>
+            <p class="text-slate-600 leading-relaxed mb-4 text-justify text-sm">Diseño normalizado en Tercera Forma Normal (3FN). Todas las tablas maestras heredan la llave foránea <code>institution_id</code> para garantizar el aislamiento criptográfico por inquilino mediante Row Level Security.</p>
+            <div class="w-full overflow-x-auto bg-white border border-slate-200 rounded-xl p-4 flex justify-center no-print">
+                <div class="mermaid text-sm">
+                    erDiagram
+                        INSTITUTIONS ||--o{ ACADEMIC_YEARS : "gestiona"
+                        INSTITUTIONS ||--o{ USER_PROFILES : "pertenece_a"
+                        INSTITUTIONS ||--o{ SUBJECTS : "registra"
+                        INSTITUTIONS ||--o{ GRADES : "define"
+                        USER_PROFILES ||--o| STUDENTS : "extiende_como"
+                        USER_PROFILES ||--o| GUARDIANS : "extiende_como"
+                        USER_PROFILES ||--o| TEACHERS : "extiende_como"
+                        GUARDIANS ||--o{ STUDENT_GUARDIANS : "vincula"
+                        STUDENTS ||--o{ STUDENT_GUARDIANS : "asocia"
+                        ACADEMIC_YEARS ||--o{ GROUPS : "contiene"
+                        GRADES ||--o{ GROUPS : "clasifica"
+                        GROUPS ||--o{ ENROLLMENTS : "matricula"
+                        STUDENTS ||--o{ ENROLLMENTS : "cursa"
+                        GROUPS ||--o{ SUBJECT_ASSIGNMENTS : "dicta"
+                        SUBJECTS ||--o{ SUBJECT_ASSIGNMENTS : "asigna"
+                        TEACHERS ||--o{ SUBJECT_ASSIGNMENTS : "imparte"
+                        SUBJECT_ASSIGNMENTS ||--o{ EVALUATIONS : "evalua"
+                        EVALUATIONS ||--o{ GRADE_RECORDS : "califica"
+                        STUDENTS ||--o{ GRADE_RECORDS : "obtiene"
+                        USER_PROFILES ||--o{ NOTIFICATIONS : "recibe"
+                </div>
+            </div>
+            <p class="text-xs text-slate-400 text-center mt-2 no-print">* El diagrama es interactivo y renderizado en tiempo real.</p>
+        </section>
+
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold border-b-2 border-indigo-600 pb-2 mb-6 uppercase">4. Diccionario de Datos Core</h2>
+
+            <div class="mb-8 avoid-break">
+                <h3 class="font-bold text-lg text-slate-800 mb-3 flex items-center gap-2"><i class="ph-fill ph-buildings text-indigo-500"></i>Tabla: institutions</h3>
+                <div class="overflow-x-auto rounded-lg border border-slate-200"><table class="w-full text-left border-collapse"><thead class="table-header"><tr><th class="p-3">Atributo</th><th class="p-3">Tipo de Dato</th><th class="p-3">Restricción</th><th class="p-3">Descripción</th></tr></thead><tbody>
+                    <tr class="table-row"><td class="p-3 font-mono text-indigo-600">id</td><td class="p-3">UUID</td><td class="p-3 font-bold">PK</td><td class="p-3">Identificador único del colegio.</td></tr>
+                    <tr class="table-row"><td class="p-3 font-mono text-indigo-600">name</td><td class="p-3">VARCHAR(255)</td><td class="p-3">NOT NULL</td><td class="p-3">Ej: Colegio Téc. Diversificado de Barranquilla</td></tr>
+                    <tr class="table-row"><td class="p-3 font-mono text-indigo-600">slug</td><td class="p-3">VARCHAR(100)</td><td class="p-3 text-red-500 font-semibold">UNIQUE</td><td class="p-3">Ruta/subdominio (ej. cotediba)</td></tr>
+                    <tr class="table-row"><td class="p-3 font-mono text-indigo-600">theme_config</td><td class="p-3">JSONB</td><td class="p-3">Default {}</td><td class="p-3">Variables de interfaz (marca blanca)</td></tr>
+                </tbody></table></div>
+            </div>
+
+            <div class="mb-8 avoid-break">
+                <h3 class="font-bold text-lg text-slate-800 mb-3 flex items-center gap-2"><i class="ph-fill ph-users text-indigo-500"></i>Tabla: user_profiles</h3>
+                <div class="overflow-x-auto rounded-lg border border-slate-200"><table class="w-full text-left border-collapse"><thead class="table-header"><tr><th class="p-3">Atributo</th><th class="p-3">Tipo de Dato</th><th class="p-3">Restricción</th><th class="p-3">Descripción</th></tr></thead><tbody>
+                    <tr class="table-row"><td class="p-3 font-mono text-indigo-600">id</td><td class="p-3">UUID</td><td class="p-3 font-bold">PK, FK</td><td class="p-3">Vinculado a auth.users de Supabase.</td></tr>
+                    <tr class="table-row"><td class="p-3 font-mono text-indigo-600">institution_id</td><td class="p-3">UUID</td><td class="p-3 font-bold">FK</td><td class="p-3">Filtro Multi-tenant obligatorio.</td></tr>
+                    <tr class="table-row"><td class="p-3 font-mono text-indigo-600">role</td><td class="p-3">ENUM</td><td class="p-3">NOT NULL</td><td class="p-3">'admin', 'teacher', 'student', 'guardian'</td></tr>
+                </tbody></table></div>
+            </div>
+
+            <div class="mb-8 avoid-break">
+                <h3 class="font-bold text-lg text-slate-800 mb-3 flex items-center gap-2"><i class="ph-fill ph-exam text-indigo-500"></i>Tabla: grade_records (Calificaciones)</h3>
+                <div class="overflow-x-auto rounded-lg border border-slate-200"><table class="w-full text-left border-collapse"><thead class="table-header"><tr><th class="p-3">Atributo</th><th class="p-3">Tipo de Dato</th><th class="p-3">Restricción</th><th class="p-3">Descripción</th></tr></thead><tbody>
+                    <tr class="table-row"><td class="p-3 font-mono text-indigo-600">evaluation_id</td><td class="p-3">UUID</td><td class="p-3 font-bold">FK</td><td class="p-3">A qué actividad pertenece.</td></tr>
+                    <tr class="table-row"><td class="p-3 font-mono text-indigo-600">student_id</td><td class="p-3">UUID</td><td class="p-3 font-bold">FK</td><td class="p-3">Estudiante evaluado.</td></tr>
+                    <tr class="table-row"><td class="p-3 font-mono text-indigo-600">score</td><td class="p-3">NUMERIC(3,2)</td><td class="p-3">NOT NULL</td><td class="p-3">Nota cuantitativa (ej. 4.50)</td></tr>
+                </tbody></table></div>
+            </div>
+        </section>
+
+        <div class="page-break"></div>
+
+        <section class="mb-12 avoid-break">
+            <h2 class="text-2xl font-bold border-b-2 border-indigo-600 pb-2 mb-6 uppercase">5. Arquitectura Operativa y de Seguridad</h2>
+            <h3 class="font-bold text-lg text-slate-800 mb-2">A. Aislamiento Estricto de Datos (RLS)</h3>
+            <p class="text-sm text-slate-600 mb-4 text-justify">La seguridad no depende de filtros en el backend, sino de políticas nativas del motor PostgreSQL. Al autenticarse, Supabase genera un Token JWT. PostgreSQL intercepta cualquier consulta y evalúa la política definida. Ejemplo real en el código:</p>
+            <div class="bg-slate-900 text-slate-200 p-4 rounded-lg font-mono text-xs mb-6 overflow-x-auto"><pre><code>-- Política de seguridad a nivel de fila (RLS)
+CREATE POLICY "Aislamiento Institucional Estricto"
+ON grade_records
+FOR SELECT USING (
+  institution_id IN (
+    SELECT institution_id FROM user_profiles
+    WHERE user_profiles.id = auth.uid()
+  )
+);</code></pre></div>
+            <h3 class="font-bold text-lg text-slate-800 mb-2">B. Motor de Marca Blanca (Enrutamiento Dinámico)</h3>
+            <p class="text-sm text-slate-600 mb-4 text-justify">El middleware de Next.js captura el parámetro <code>slug</code> (ej. <em>/cotediba</em>). Consulta la tabla <code>institutions</code>, inyecta el JSONB de <code>theme_config</code> como variables CSS y renderiza la aplicación con la identidad visual exclusiva del colegio.</p>
+            <h3 class="font-bold text-lg text-slate-800 mb-2">C. Ciclo de Vida: Notificaciones Realtime</h3>
+            <div class="bg-slate-50 border border-slate-200 p-5 rounded-lg"><ol class="list-decimal pl-5 space-y-2 text-sm text-slate-700">
+                <li>El docente inserta una calificación (<code>score = 4.5</code>).</li>
+                <li>Un Trigger (PL/pgSQL) detecta el <code>INSERT</code>, cruza la tabla <code>student_guardians</code> y crea un registro en <code>notifications</code> para el acudiente principal.</li>
+                <li>Supabase Realtime captura la mutación y la emite vía <strong>WebSockets</strong>.</li>
+                <li>El dispositivo del padre recibe la alerta instantánea con la marca visual del colegio.</li>
+            </ol></div>
+        </section>
+    </div>
+</body>
+</html>
